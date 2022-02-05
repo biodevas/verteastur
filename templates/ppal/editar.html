@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Editar "{{ vertedero['tipo'] }}"{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="tipo">Tipo</label>
+    <input name="tipo" id="tipo"
+      value="{{ request.form['tipo'] or vertedero['tipo'] }}" required>
+    <label for="descripcion">Descripción</label>
+    <textarea name="descripcion" id="descripcion">{{ request.form['descripcion'] or vertedero['descripcion'] }}</textarea>
+    <input type="submit" value="Actualizar">
+  </form>
+  <hr>
+  <form action="{{ url_for('ppal.eliminar', id=vertedero['id']) }}" method="post">
+    <input class="danger" type="submit" value="Eliminar" onclick="return confirm('¿Seguro que quieres eliminar este registro?');">
+  </form>
+{% endblock %}

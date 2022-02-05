@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Vertederos{% endblock %}</h1>
+  {% if g.usuario %}
+    <a class="action" href="{{ url_for('ppal.nuevo') }}">Nuevo</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% for vertedero in vertederos %}
+    <article class="vertedero">
+      <header>
+        <div>
+          <h1>{{ vertedero['tipo'] }}</h1>
+          <div class="about">Informado por {{ vertedero['username'] }}. Fecha: {{ vertedero['fecha'].strftime('%Y-%m-%d') }}</div>
+        </div>
+        {% if g.usuario['id'] == vertedero['usuario_id'] %}
+          <a class="action" href="{{ url_for('ppal.editar', id=vertedero['id']) }}">Editar</a>
+        {% endif %}
+      </header>
+      <p class="body">{{ vertedero['descripcion'] }}</p>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}

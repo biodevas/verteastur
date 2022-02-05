@@ -11,7 +11,7 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 # Registro de usuarios
 @bp.route('/registro', methods=('GET', 'POST'))
-def register():
+def registro():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -48,18 +48,18 @@ def login():
         password = request.form['password']
         db = get_db()
         error = None
-        user = db.execute(
+        usuario = db.execute(
             'SELECT * FROM usuario WHERE username = ?', (username,)
         ).fetchone()
 
-        if user is None:
+        if usuario is None:
             error = 'El usuario no existe.'
-        elif not check_password_hash(user['password'], password):
+        elif not check_password_hash(usuario['password'], password):
             error = 'Contraseña incorrecta.'
 
         if error is None:
             session.clear()
-            session['user_id'] = user['id']
+            session['usuario_id'] = usuario['id']
             return redirect(url_for('index'))
 
         flash(error)
@@ -70,19 +70,19 @@ def login():
 # Cargar la sesión del usuario
 @bp.before_app_request
 def load_logged_in_user():
-    user_id = session.get('user_id')
+    usuario_id = session.get('usuario_id')
 
-    if user_id is None:
-        g.user = None
+    if usuario_id is None:
+        g.usuario = None
     else:
-        g.user = get_db().execute(
-            'SELECT * FROM usuario WHERE id = ?', (user_id,)
+        g.usuario = get_db().execute(
+            'SELECT * FROM usuario WHERE id = ?', (usuario_id,)
         ).fetchone()
 
 
 # Cerrar sesión
 @bp.route('/salir')
-def logout():
+def salir():
     session.clear()
     return redirect(url_for('index'))
 
@@ -91,7 +91,7 @@ def logout():
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
-        if g.user is None:
+        if g.usuario is None:
             return redirect(url_for('auth.login'))
 
         return view(**kwargs)

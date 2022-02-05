@@ -4,11 +4,11 @@
 <nav>
   <h1>BIODEVAS</h1>
   <ul>
-    {% if g.user %}
-      <li><span>{{ g.user['username'] }}</span>
-      <li><a href="{{ url_for('auth.logout') }}">Salir</a>
+    {% if g.usuario %}
+      <li><span>{{ g.usuario['username'] }}</span>
+      <li><a href="{{ url_for('auth.salir') }}">Salir</a>
     {% else %}
-      <li><a href="{{ url_for('auth.register') }}">Registro</a>
+      <li><a href="{{ url_for('auth.registro') }}">Registro</a>
       <li><a href="{{ url_for('auth.login') }}">Entrar</a>
     {% endif %}
   </ul>
