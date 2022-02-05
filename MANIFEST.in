@@ -1,0 +1,4 @@
+include verteastur/esquema.sql
+graft verteastur/static
+graft verteastur/templates
+global-exclude *.pyc
