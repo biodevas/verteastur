@@ -13,11 +13,30 @@ bp = Blueprint('ppal', __name__)
 def index():
     db = get_db()
     vertederos = db.execute(
-        'SELECT p.id, tipo, descripcion, fecha, usuario_id, username'
-        ' FROM vertederos p JOIN usuario u ON p.usuario_id = u.id'
+        'SELECT v.id, tipo, descripcion, fecha, usuario_id, username'
+        ' FROM vertederos v JOIN usuario u ON v.usuario_id = u.id'
         ' ORDER BY fecha DESC'
     ).fetchall()
     return render_template('ppal/index.html', vertederos=vertederos)
+
+
+# Recupera un registro para la vista detalle
+def get_vertedero_detalle(id):
+    db = get_db()
+    vertedero = db.execute(
+        'SELECT v.id, tipo, descripcion, fecha, usuario_id, username'
+        ' FROM vertederos v JOIN usuario u ON v.usuario_id = u.id'
+        ' WHERE v.id = ?',
+        (id,)).fetchone()
+    if vertedero is None:
+        abort(404)
+    return vertedero
+
+# Vista detalle
+@bp.route('/<int:id>')
+def vertedero(id):
+    vertedero = get_vertedero_detalle(id)
+    return render_template('ppal/vertedero.html', vertedero=vertedero)
 
 
 # Crear nuevo avistamiento
@@ -50,9 +69,9 @@ def nuevo():
 # Comprobar la existencia de un registro
 def get_vertedero(id, check_usuario=True):
     vertedero = get_db().execute(
-        'SELECT p.id, tipo, descripcion, fecha, usuario_id, username'
-        ' FROM vertederos p JOIN usuario u ON p.usuario_id = u.id'
-        ' WHERE p.id = ?',
+        'SELECT v.id, tipo, descripcion, fecha, usuario_id, username'
+        ' FROM vertederos v JOIN usuario u ON v.usuario_id = u.id'
+        ' WHERE v.id = ?',
         (id,)
     ).fetchone()
 

@@ -6,15 +6,22 @@
 
 {% block content %}
   <form method="post">
-    <label for="tipo">Tipo</label>
-    <input name="tipo" id="tipo"
-      value="{{ request.form['tipo'] or vertedero['tipo'] }}" required>
-    <label for="descripcion">Descripción</label>
-    <textarea name="descripcion" id="descripcion">{{ request.form['descripcion'] or vertedero['descripcion'] }}</textarea>
-    <input type="submit" value="Actualizar">
+
+    <div class="form-group">
+      <label for="tipo">Tipo</label>
+      <input name="tipo" id="tipo" class="form-control"
+        value="{{ request.form['tipo'] or vertedero['tipo'] }}" required>
+    </div>
+    <div class="form-group">
+      <label for="descripcion">Descripción</label>
+      <textarea name="descripcion" class="form-control" id="descripcion">{{ request.form['descripcion'] or vertedero['descripcion'] }}</textarea>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary" value="Actualizar">
+    </div>
   </form>
   <hr>
   <form action="{{ url_for('ppal.eliminar', id=vertedero['id']) }}" method="post">
-    <input class="danger" type="submit" value="Eliminar" onclick="return confirm('¿Seguro que quieres eliminar este registro?');">
+    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que quieres eliminar este registro?');">Eliminar</button>
   </form>
 {% endblock %}

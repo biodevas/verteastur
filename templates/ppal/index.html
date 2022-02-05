@@ -2,9 +2,6 @@
 
 {% block header %}
   <h1>{% block title %}Vertederos{% endblock %}</h1>
-  {% if g.usuario %}
-    <a class="action" href="{{ url_for('ppal.nuevo') }}">Nuevo</a>
-  {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -12,11 +9,13 @@
     <article class="vertedero">
       <header>
         <div>
-          <h1>{{ vertedero['tipo'] }}</h1>
-          <div class="about">Informado por {{ vertedero['username'] }}. Fecha: {{ vertedero['fecha'].strftime('%Y-%m-%d') }}</div>
+          <a href="{{ url_for('ppal.vertedero', id=vertedero['id']) }}">
+            <h1>{{ vertedero['tipo'] }}</h1>
+          </a>
+          <div class="about"><span class="badge badge-primary">Informado por {{ vertedero['username'] }}. Fecha: {{ vertedero['fecha'].strftime('%Y-%m-%d') }}</span></div>
         </div>
         {% if g.usuario['id'] == vertedero['usuario_id'] %}
-          <a class="action" href="{{ url_for('ppal.editar', id=vertedero['id']) }}">Editar</a>
+          <a class="action" href="{{ url_for('ppal.editar', id=vertedero['id']) }}"><span class="badge badge-warning">Editar</span></a>
         {% endif %}
       </header>
       <p class="body">{{ vertedero['descripcion'] }}</p>

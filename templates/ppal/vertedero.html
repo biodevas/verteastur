@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{% block title %} {{ vertedero['tipo'] }} {% endblock %}</h2>
+    <span class="badge badge-primary">{{ vertedero['fecha'] }}</span>
+    <p>{{ vertedero['descripcion'] }}</p>
+    <p>Informado por: {{ vertedero['username'] }}</p>
+    <!--<p>{{ vertedero['foto'] }}</p>-->
+{% endblock %}
