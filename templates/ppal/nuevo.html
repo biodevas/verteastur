@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-  <form method="post">
+  <form method="post" action = "/nuevo" enctype = "multipart/form-data">
     <div class="form-group">
       <label for="tipo">Tipo</label>
       <input class="form-control" name="tipo" id="tipo" value="{{ request.form['tipo'] }}" required>
@@ -13,6 +13,10 @@
     <div class="form-group">
       <label for="descripcion">Descripción</label>
       <textarea name="descripcion" class="form-control" id="descripcion">{{ request.form['descripcion'] }}</textarea>
+    </div>
+    <div class="form-group">
+      <label for="foto">Imagen</label>
+      <input type = "file" name="foto" class="form-control" id="foto" value="{{ request.form['foto'] }}">
     </div>
     <div class="form-group">
       <button class="btn btn-primary" type="submit">Informar</button>

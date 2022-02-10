@@ -1,12 +1,16 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Flask, Blueprint, flash, g, redirect, render_template, request, url_for
 )
 from werkzeug.exceptions import abort
+from werkzeug import secure_filename
 
 from verteastur.auth import login_required
 from verteastur.db import get_db
 
 bp = Blueprint('ppal', __name__)
+app = Flask(__name__)
+
+app.config["UPLOAD_FOLDER"] = "verteastur/uploads/"
 
 # Recopilar avistamientos de la BD
 @bp.route('/')
@@ -46,6 +50,14 @@ def nuevo():
     if request.method == 'POST':
         tipo = request.form['tipo']
         descripcion = request.form['descripcion']
+        foto = request.files['foto']
+        fotofilename = (secure_filename(foto.filename))
+        foto.save(app.config['UPLOAD_FOLDER'] + fotofilename)
+        fotorutafilename = (app.config['UPLOAD_FOLDER'] + fotofilename)
+
+        #file = open(app.config['UPLOAD_FOLDER'] + fotofilename,"r")
+        #content = file.read()
+
         error = None
 
         if not tipo:
@@ -56,9 +68,9 @@ def nuevo():
         else:
             db = get_db()
             db.execute(
-                'INSERT INTO vertederos (tipo, descripcion, usuario_id)'
-                ' VALUES (?, ?, ?)',
-                (tipo, descripcion, g.usuario['id'])
+                'INSERT INTO vertederos (tipo, descripcion, foto, usuario_id)'
+                ' VALUES (?, ?, ?, ?)',
+                (tipo, descripcion, fotorutafilename, g.usuario['id'])
             )
             db.commit()
             return redirect(url_for('ppal.index'))
